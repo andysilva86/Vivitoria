@@ -2022,6 +2022,8 @@ mod lds_bounds_tests {
         w.push(0x887E_027E); // s_or_b32 exec_lo, exec_lo, s2
         w.push(S_ENDPGM);
 
+        // Run on the card only on Windows; elsewhere the translation is the test.
+        #[cfg_attr(not(windows), allow(unused_variables))]
         let cs = compile_lds_cs(&w, false, 24, 1, [64, 1, 1]).unwrap();
         #[cfg(windows)]
         {
@@ -2118,6 +2120,8 @@ mod lds_bounds_tests {
         w.extend(buf_store_dword(7, 8, 12, 0));
         w.push(S_ENDPGM);
 
+        // Run on the card only on Windows; elsewhere the translation is the test.
+        #[cfg_attr(not(windows), allow(unused_variables))]
         let cs = compile_lds_cs(&w, false, 10, 1, [64, 1, 1]).unwrap();
         #[cfg(windows)]
         {
@@ -2229,6 +2233,8 @@ mod lds_bounds_tests {
         // WaveSize(32) is emitted for wave64-on-wave32 with LDS; WARP refuses
         // explicit WaveSize(32) PSOs, so execute on hardware GPU when present
         // (`compile_lds_cs` already validates the container with `dxil.dll`).
+        // Run on the card only on Windows; elsewhere the translation is the test.
+        #[cfg_attr(not(windows), allow(unused_variables))]
         let cs = compile_lds_cs(&w, true, 6, 1, [64, 1, 1]).unwrap();
         #[cfg(windows)]
         {
