@@ -57,6 +57,8 @@ pub mod pipeline;
 #[cfg(windows)]
 mod plaincopy;
 #[cfg(windows)]
+mod pool;
+#[cfg(windows)]
 mod ranges;
 #[cfg(windows)]
 mod primitive;
