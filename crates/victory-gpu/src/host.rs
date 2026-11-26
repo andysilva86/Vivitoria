@@ -203,6 +203,7 @@ fn sweep() {
     }
     crate::pipeline::trim_library();
     crate::shadow::let_go_idle();
+    crate::pool::reclaim();
     crate::texture::let_go_idle();
     crate::resource::let_go_idle();
 }
@@ -8988,6 +8989,19 @@ impl Host {
                 None
             }
         }
+    }
+
+    /// [`Self::shared_buffer`] for a host copy of title memory: placed in
+    /// the pool of such copies when `VICTORY_SHARED_POOL=1` and it fits
+    /// (`crate::pool`), a committed buffer otherwise. A copy let go hands
+    /// its buffer back with `crate::pool::give`.
+    pub(crate) fn copy_buffer(&self, size: u64) -> Option<(ID3D12Resource, *mut u8)> {
+        if crate::pool::on()
+            && let Some(placed) = crate::pool::take(&self.device, size)
+        {
+            return Some(placed);
+        }
+        self.shared_buffer(size)
     }
 
     /// A device-local buffer shaders may write (unordered access) and indirect
